@@ -16,6 +16,7 @@ class GroceryList extends StatefulWidget {
 class _GroceryListState extends State<GroceryList> {
   List<GroceryItem> _groceryItems = [];
   var _isLoading = true;
+  String? _error;
 
   @override
   void initState() {
@@ -26,10 +27,15 @@ class _GroceryListState extends State<GroceryList> {
   void _loadItems() async {
     final url = Uri.https(
         'flutter-prep-80bfd-default-rtdb.firebaseio.com', 'shopping-list.json');
-
     final response = await http.get(url);
-    final Map<String, dynamic> listData = json.decode(response.body);
 
+    if (response.statusCode >= 400) {
+      setState(() {
+        _error = 'Failed to fetch data. Please try again later.';
+      });
+    }
+
+    final Map<String, dynamic> listData = json.decode(response.body);
     final List<GroceryItem> loadedItems = [];
     for (final item in listData.entries) {
       //.entries ของ Map จะให้คู่ key-value เป็น MapEntry ทำให้สามารถเข้าถึงทั้ง key และ value
@@ -79,9 +85,7 @@ class _GroceryListState extends State<GroceryList> {
 
   @override
   Widget build(BuildContext context) {
-    Widget content = const Center(
-      child: Text('No item added yet.'),
-    );
+    Widget content = const Center(child: Text('No item added yet.'));
 
     if (_isLoading) {
       content = const Center(child: CircularProgressIndicator());
@@ -107,6 +111,11 @@ class _GroceryListState extends State<GroceryList> {
         ),
       );
     }
+
+    if (_error != null) {
+      content = Center(child: Text(_error!));
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Your Groceries'),
