@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:chat_app/widgets/user_image_picker.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -51,8 +52,18 @@ class _AuthScreenState extends State<AuthScreen> {
             .child('${userCredentials.user!.uid}.jpg');
 
         await storageRef.putFile(_selectedImage!);
-        final imageUrl = storageRef.getDownloadURL();
-        print(imageUrl);
+        final imageUrl = await storageRef.getDownloadURL();
+
+        await FirebaseFirestore.instance
+            .collection('users')
+            .doc(userCredentials.user!.uid)
+            .set({
+          'username': 'to be done',
+          'email': _enteredEmail,
+          'image_url': imageUrl
+        });
+
+        print('Finish');
       }
     } on FirebaseAuthException catch (error) {
       if (error.code == 'email-already-in-use') {
@@ -73,10 +84,7 @@ class _AuthScreenState extends State<AuthScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme
-          .of(context)
-          .colorScheme
-          .primary,
+      backgroundColor: Theme.of(context).colorScheme.primary,
       body: Center(
         child: SingleChildScrollView(
           child: Column(
@@ -116,9 +124,7 @@ class _AuthScreenState extends State<AuthScreen> {
                             textCapitalization: TextCapitalization.none,
                             validator: (value) {
                               if (value == null ||
-                                  value
-                                      .trim()
-                                      .isEmpty ||
+                                  value.trim().isEmpty ||
                                   !value.contains('@')) {
                                 return 'Please enter a valid email address.';
                               }
@@ -131,12 +137,10 @@ class _AuthScreenState extends State<AuthScreen> {
                           ),
                           TextFormField(
                             decoration:
-                            const InputDecoration(labelText: 'Password'),
+                                const InputDecoration(labelText: 'Password'),
                             obscureText: true,
                             validator: (value) {
-                              if (value == null || value
-                                  .trim()
-                                  .length < 6) {
+                              if (value == null || value.trim().length < 6) {
                                 return 'Password must be at least 6 characters long.';
                               }
                               return null;
@@ -146,14 +150,13 @@ class _AuthScreenState extends State<AuthScreen> {
                             },
                           ),
                           const SizedBox(height: 12),
-                          if(_isAuthenticating)
+                          if (_isAuthenticating)
                             const CircularProgressIndicator(),
                           if (!_isAuthenticating)
                             ElevatedButton(
                               onPressed: _submit,
                               style: ElevatedButton.styleFrom(
-                                backgroundColor: Theme
-                                    .of(context)
+                                backgroundColor: Theme.of(context)
                                     .colorScheme
                                     .primaryContainer,
                               ),
