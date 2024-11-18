@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class BillAmountField extends StatelessWidget {
@@ -21,7 +20,7 @@ class BillAmountField extends StatelessWidget {
       ),
       // keyboardType: TextInputType.number,
         onChanged: (String value) {
-          print("value: $value");
+          onChanged(value);
         },
     );
   }

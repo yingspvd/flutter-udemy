@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:utip/providers/TipCalculatorModel.dart';
 import 'package:utip/widgets/bill_amount_field.dart';
 import 'package:utip/widgets/person_counter.dart';
 import 'package:utip/widgets/tip_row.dart';
@@ -6,7 +8,8 @@ import 'package:utip/widgets/tip_slider.dart';
 import 'package:utip/widgets/total_per_person.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(ChangeNotifierProvider(
+      create: (context) => TipCalculatorModel(), child: const MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -33,37 +36,10 @@ class UTip extends StatefulWidget {
 }
 
 class _UTipState extends State<UTip> {
-  int _personCount = 1;
-  double _tipPercentage = 0.0;
-  double _billTotal = 100.0;
-
-  double totalPerson() {
-    return ((_billTotal * _tipPercentage) + (_billTotal)) / _personCount;
-  }
-
-  double totalTip() {
-    return ((_billTotal * _tipPercentage));
-  }
-
-  void increment() {
-    setState(() {
-      _personCount = _personCount + 1;
-    });
-  }
-
-  void decrement() {
-    setState(() {
-      if (_personCount > 1) {
-        _personCount--;
-      }
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     var theme = Theme.of(context);
-    double total = totalPerson();
-    double totalT = totalTip();
+    final model = Provider.of<TipCalculatorModel>(context);
 
     var style = theme.textTheme.titleMedium!.copyWith(
       color: theme.colorScheme.onPrimary,
@@ -77,7 +53,7 @@ class _UTipState extends State<UTip> {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          TotalPerson(style: style, total: total, theme: theme),
+          TotalPerson(style: style, total: model.totalPerPerson, theme: theme),
 
           // Form
           Padding(
@@ -91,37 +67,40 @@ class _UTipState extends State<UTip> {
               child: Column(
                 children: [
                   BillAmountField(
-                    billAmount: _billTotal.toString(),
+                    billAmount: model.billTotal.toString(),
                     onChanged: (value) {
-                      setState(() {
-                        _billTotal = double.parse(value);
-                      });
-                      // print("Amount: $value");
+                      model.updateBillTotal(double.parse(value));
                     },
                   ),
 
                   PersonCounter(
                     theme: theme,
-                    personCount: _personCount,
-                    onDecrement: decrement,
-                    onIncrement: increment,
+                    personCount: model.personCount,
+                    onDecrement: () {
+                      if (model.personCount > 1) {
+                        model.updatePersonCount(model.personCount - 1);
+                      }
+                    },
+                    onIncrement: () {
+                      model.updatePersonCount(model.personCount + 1);
+                    },
                   ),
 
                   // === Tip Section ===
-                  TipRow(theme: theme, totalT: totalT),
+                  TipRow(
+                    theme: theme,
+                    billTotal: model.billTotal,
+                    percentage: model.tipPercentage,
+                  ),
 
                   // === Slider Text ===
-                  Text("${(_tipPercentage * 100).round()} %"),
+                  Text("${(model.tipPercentage * 100).round()} %"),
 
                   // === Tip Slider ===
                   TipSlider(
-                    tipPercentage: _tipPercentage,
+                    tipPercentage: model.tipPercentage,
                     onChanged: (double value) {
-                      setState(
-                        () {
-                          _tipPercentage = value;
-                        },
-                      );
+                      model.updateTipPercentage(value);
                     },
                   )
                 ],
@@ -133,4 +112,3 @@ class _UTipState extends State<UTip> {
     );
   }
 }
-
