@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:utip/widgets/bill_amount_field.dart';
 import 'package:utip/widgets/person_counter.dart';
 import 'package:utip/widgets/tip_slider.dart';
 
@@ -32,6 +33,15 @@ class UTip extends StatefulWidget {
 class _UTipState extends State<UTip> {
   int _personCount = 1;
   double _tipPercentage = 0.0;
+  double _billTotal = 100.0;
+
+  double totalPerson() {
+    return ((_billTotal * _tipPercentage) + (_billTotal)) / _personCount;
+  }
+
+  double totalTip() {
+    return ((_billTotal * _tipPercentage));
+  }
 
   void increment() {
     setState(() {
@@ -41,7 +51,7 @@ class _UTipState extends State<UTip> {
 
   void decrement() {
     setState(() {
-      if (_personCount > 0) {
+      if (_personCount > 1) {
         _personCount--;
       }
     });
@@ -50,6 +60,9 @@ class _UTipState extends State<UTip> {
   @override
   Widget build(BuildContext context) {
     var theme = Theme.of(context);
+    double total = totalPerson();
+    double totalT = totalTip();
+
     var style = theme.textTheme.titleMedium!.copyWith(
       color: theme.colorScheme.onPrimary,
       fontWeight: FontWeight.bold,
@@ -74,7 +87,7 @@ class _UTipState extends State<UTip> {
                 children: [
                   Text('Total per person', style: style),
                   Text(
-                    '\$ 23.33',
+                    '$total',
                     style: style.copyWith(
                         color: theme.colorScheme.onPrimary,
                         fontSize: theme.textTheme.displaySmall?.fontSize),
@@ -88,20 +101,20 @@ class _UTipState extends State<UTip> {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Container(
+              padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(5),
                   border:
                       Border.all(color: theme.colorScheme.primary, width: 2)),
               child: Column(
                 children: [
-                  TextField(
-                    decoration: const InputDecoration(
-                        border: OutlineInputBorder(),
-                        prefixIcon: Icon(Icons.attach_money),
-                        labelText: 'Bill Amount'),
-                    keyboardType: TextInputType.number,
-                    onChanged: (String value) {
-                      print("value: $value");
+                  BillAmountField(
+                    billAmount: _billTotal.toString(),
+                    onChanged: (value) {
+                      setState(() {
+                        _billTotal = double.parse(value);
+                      });
+                      // print("Amount: $value");
                     },
                   ),
                   PersonCounter(
@@ -116,7 +129,7 @@ class _UTipState extends State<UTip> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text('Tip', style: theme.textTheme.titleMedium),
-                      Text('\$ 20%', style: theme.textTheme.titleMedium)
+                      Text('$totalT', style: theme.textTheme.titleMedium)
                     ],
                   ),
 
@@ -124,11 +137,16 @@ class _UTipState extends State<UTip> {
                   Text("${(_tipPercentage * 100).round()} %"),
 
                   // === Tip Slider ===
-                  TipSlider(tipPercentage: _tipPercentage, 
-                  onChanged: (double value) {  
-                    setState(() {
-                    _tipPercentage = value;
-                  },); },)
+                  TipSlider(
+                    tipPercentage: _tipPercentage,
+                    onChanged: (double value) {
+                      setState(
+                        () {
+                          _tipPercentage = value;
+                        },
+                      );
+                    },
+                  )
                 ],
               ),
             ),
@@ -138,4 +156,3 @@ class _UTipState extends State<UTip> {
     );
   }
 }
-
