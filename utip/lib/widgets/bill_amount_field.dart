@@ -15,13 +15,14 @@ class BillAmountField extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextField(
       decoration: const InputDecoration(
-          border: OutlineInputBorder(),
-          prefixIcon: Icon(Icons.attach_money),
-          labelText: 'Bill Amount'),
-      keyboardType: TextInputType.number,
-      onChanged: (String value) {
-        print("value: $value");
-      },
+        labelText: "Bill Amount",
+        border: OutlineInputBorder(),
+        prefixIcon: Icon(Icons.attach_money),
+      ),
+      // keyboardType: TextInputType.number,
+        onChanged: (String value) {
+          print("value: $value");
+        },
     );
   }
 }
