@@ -48,7 +48,6 @@ class HomeScreen extends StatelessWidget {
             ),
             // category
             CategoryList(),
-            CategoryList(),
             Text(
               "Popular menu items",
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
