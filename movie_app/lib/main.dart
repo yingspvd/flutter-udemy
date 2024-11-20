@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:movie_app/models/movie.dart';
+import 'package:movie_app/pages/movie_details.dart';
 import 'package:movie_app/providers/movie_provider.dart';
 import 'package:movie_app/utils/movie_parser.dart';
 import 'package:provider/provider.dart';
+
+import 'components/movie_card.dart';
 
 void main() {
   runApp(ChangeNotifierProvider(
@@ -53,16 +57,10 @@ class _HomeState extends State<Home> {
             itemCount: movieData.movieList.length,
             itemBuilder: (context, index) {
               final movie = movieData.movieList[index];
-              return ListTile(
-                title: Text(movie.title),
-                subtitle: Text(movie.director),
-                trailing: const Icon(Icons.sunny),
-                leading: CircleAvatar(
-                  child: Text(movie.title[0]),
-                ),
-              );
+              return MovieCard(movie: movie);
             }),
       ),
     );
   }
 }
+
