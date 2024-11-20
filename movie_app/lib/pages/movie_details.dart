@@ -17,7 +17,7 @@ class MovieDetails extends StatelessWidget {
       body: Container(
         child: Column(
           children: [
-            MovieCard(movie: movie),
+            MovieCard(movie: movie, isDetaills: true,),
             Text(
               "Movie Posters",
               style: Theme.of(context).textTheme.headlineSmall,
