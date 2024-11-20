@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_demo/widget/category_list.dart';
+import 'package:flutter_demo/widget/menu_item.dart';
+import 'package:flutter_demo/widget/menu_list.dart';
 import 'package:flutter_demo/widget/profile.dart';
 import 'package:flutter_demo/widget/search_bar.dart';
 
@@ -52,6 +54,8 @@ class HomeScreen extends StatelessWidget {
               "Popular menu items",
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
+            SizedBox(height: 8),
+            MenuList()
           ],
         ),
       )),
