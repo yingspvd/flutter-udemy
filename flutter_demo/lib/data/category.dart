@@ -3,6 +3,10 @@ final List<Map<String, String>> categories = [
   {'image': 'assets/images/pizza.png', 'title': 'Pizza'},
   {'image': 'assets/images/burger.png', 'title': 'Burgers'},
   {'image': 'assets/images/noodle.png', 'title': 'Noodles'},
+  {'image': 'assets/images/steak.png', 'title': 'Steak'},
+  {'image': 'assets/images/pizza.png', 'title': 'Pizza'},
+  {'image': 'assets/images/burger.png', 'title': 'Burgers'},
+  {'image': 'assets/images/noodle.png', 'title': 'Noodles'},
 ];
 
 // const allCategories = [
