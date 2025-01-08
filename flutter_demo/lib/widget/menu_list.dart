@@ -24,6 +24,7 @@ class MenuList extends StatelessWidget {
           return MenuItem(
             image: menus[index]['image']!,
             title: menus[index]['title']!,
+            page:  menus[index]['page']!
           );
         },
       ),
