@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_demo/data/menu.dart';
 import 'package:flutter_demo/widget/menu_item.dart';
 
@@ -22,10 +23,9 @@ class MenuList extends StatelessWidget {
         itemCount: menus.length,
         itemBuilder: (context, index) {
           return MenuItem(
-            image: menus[index]['image']!,
-            title: menus[index]['title']!,
-            page:  menus[index]['page']!
-          );
+              image: menus[index]['image']!,
+              title: menus[index]['title']!,
+              page: menus[index]['page']!);
         },
       ),
     );

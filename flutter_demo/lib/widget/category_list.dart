@@ -17,14 +17,14 @@ class CategoryList extends StatelessWidget {
         // Makes the list scroll horizontally
         itemCount: categories.length,
         itemBuilder: (context, index) {
-          return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0),
-            // Add space between items
-            child: CategoryItem(
-              image: categories[index]['image']!,
-              title: categories[index]['title']!,
-            ),
-          );
+          // return Padding(
+          //   padding: const EdgeInsets.symmetric(horizontal: 8.0),
+          //   // Add space between items
+          //   child: CategoryItem(
+          //     image: categories[index]['image']!,
+          //     title: categories[index]['title']!,
+          //   ),
+          // );
         },
       ),
     );
