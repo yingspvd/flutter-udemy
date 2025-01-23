@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_demo/screen/home_screen.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 import '../widget/nutrition_fact_widget.dart';
@@ -122,6 +123,16 @@ class DetailScreen extends StatelessWidget {
                 ),
               ],
             ),
+            SizedBox(height: 20),
+            Center(
+                child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => HomeScreen()));
+                    },
+                    child: const Text("Favorite")))
           ],
         ),
       ),
